@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# enable rpmfusion
+sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+# enable third-party repo
+sudo dnf install -y dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf copr enable atim/alacritty -y 
+sudo dnf copr enable atim/lazygit -y
+
+sudo dnf groupinstall -y 'C Development Tools and Libraries'
+sudo dnf install -y $(cat packages-lists)
