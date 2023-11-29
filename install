@@ -6,8 +6,26 @@ sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-rel
 # enable third-party repo
 sudo dnf install -y dnf-plugins-core
 sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
 sudo dnf copr enable atim/alacritty -y 
 sudo dnf copr enable atim/lazygit -y
 
 sudo dnf groupinstall -y 'C Development Tools and Libraries'
 sudo dnf install -y $(cat packages-lists)
+
+# install rust
+if ! command -v cargo &> /dev/null
+then
+    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+    source ~/.bashrc
+    cargo install bat eza termusic termusic-server ripgrep zoxide fnm 
+    cargo install joshuto --version 0.9.4
+fi
+
+# install fzf
+if [ ! -d /home/tie/.fzf ]; then
+   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+   bash ~/.fzf/install
+   source ~/.bashrc
+fi
+
