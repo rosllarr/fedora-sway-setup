@@ -1,14 +1,34 @@
 #!/usr/bin/env bash
 
-# enable rpmfusion
-sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# enable rpmfusion repo
+check_repo_exists=$(dnf repolist | grep rpmfusion | wc -l)
+expect=4
+if [ ! $check_repo_exists == $expect ]; then
+    sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+fi
 
-# enable third-party repo
-sudo dnf install -y dnf-plugins-core
-sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
-sudo dnf copr enable atim/alacritty -y 
-sudo dnf copr enable atim/lazygit -y
+# enable docker repo
+check_repo_exists=$(dnf repolist | grep docker-ce-stable | wc -l)
+expect=1
+if [ ! $check_repo_exists == $expect ]; then
+    sudo dnf install -y dnf-plugins-core
+    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+fi
+
+# enable fish-shell repo
+check_repo_exists=$(dnf repolist | grep shells_fish | wc -l)
+expect=1
+if [ ! $check_repo_exists == $expect ]; then
+    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
+fi
+
+# enable alacritty and lazygit repos
+check_repo_exists=$(dnf repolist | grep atim | wc -l)
+expect=2
+if [ ! $check_repo_exists == $expect ]; then
+    sudo dnf copr enable atim/alacritty -y 
+    sudo dnf copr enable atim/lazygit -y
+fi
 
 sudo dnf groupinstall -y 'C Development Tools and Libraries'
 sudo dnf install -y $(cat packages-lists)
@@ -36,3 +56,9 @@ if [ ! -d $sway_home ]; then
 fi
 cp home/skel/.config/sway/config $sway_home/config
 
+# install nerd fronts
+nerd_fonts_home=$HOME/.nerd-fonts
+if [ ! -d $nerd_fonts_home ]; then
+   git clone https://github.com/ryanoasis/nerd-fonts.git ~/.nerd-fonts
+   bash ~/.nerd-fonts/install.sh
+fi
