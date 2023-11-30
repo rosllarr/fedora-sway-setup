@@ -23,9 +23,16 @@ then
 fi
 
 # install fzf
-if [ ! -d /home/tie/.fzf ]; then
+if [ ! -d $HOME/.fzf ]; then
    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
    bash ~/.fzf/install
    source ~/.bashrc
 fi
+
+# config sway
+sway_home=$HOME/.config/sway
+if [ ! -d $sway_home ]; then
+   mkdir -p $sway_home
+fi
+cp home/skel/.config/sway/config $sway_home/config
 
