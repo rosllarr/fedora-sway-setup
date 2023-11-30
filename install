@@ -1,64 +1,84 @@
 #!/usr/bin/env bash
 
+# global variables
+home_skel=home/skel
+
 # enable rpmfusion repo
 check_repo_exists=$(dnf repolist | grep rpmfusion | wc -l)
 expect=4
 if [ ! $check_repo_exists == $expect ]; then
-    sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+	sudo dnf install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 fi
 
 # enable docker repo
 check_repo_exists=$(dnf repolist | grep docker-ce-stable | wc -l)
 expect=1
 if [ ! $check_repo_exists == $expect ]; then
-    sudo dnf install -y dnf-plugins-core
-    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+	sudo dnf install -y dnf-plugins-core
+	sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
 fi
 
 # enable fish-shell repo
 check_repo_exists=$(dnf repolist | grep shells_fish | wc -l)
 expect=1
 if [ ! $check_repo_exists == $expect ]; then
-    sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
+	sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
 fi
 
 # enable alacritty and lazygit repos
 check_repo_exists=$(dnf repolist | grep atim | wc -l)
 expect=2
 if [ ! $check_repo_exists == $expect ]; then
-    sudo dnf copr enable atim/alacritty -y 
-    sudo dnf copr enable atim/lazygit -y
+	sudo dnf copr enable atim/alacritty -y
+	sudo dnf copr enable atim/lazygit -y
 fi
 
 sudo dnf groupinstall -y 'C Development Tools and Libraries'
 sudo dnf install -y $(cat packages-lists)
+pip3 install --user pynvim
 
 # install rust
-if ! command -v cargo &> /dev/null
-then
-    curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
-    source ~/.bashrc
-    cargo install bat eza termusic termusic-server ripgrep zoxide fnm 
-    cargo install joshuto --version 0.9.4
+if ! command -v cargo &>/dev/null; then
+	curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+	source ~/.bashrc
+	cargo install bat eza termusic termusic-server ripgrep zoxide fnm
+	cargo install joshuto --version 0.9.4
 fi
 
 # install fzf
 if [ ! -d $HOME/.fzf ]; then
-   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-   bash ~/.fzf/install
-   source ~/.bashrc
+	git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+	bash ~/.fzf/install
+	source ~/.bashrc
 fi
 
 # config sway
 sway_home=$HOME/.config/sway
 if [ ! -d $sway_home ]; then
-   mkdir -p $sway_home
+	mkdir -p $sway_home
 fi
-cp home/skel/.config/sway/config $sway_home/config
+cp $home_skel/.config/sway/config $sway_home/config
 
 # install nerd fronts
 nerd_fonts_home=$HOME/.nerd-fonts
 if [ ! -d $nerd_fonts_home ]; then
-   git clone https://github.com/ryanoasis/nerd-fonts.git ~/.nerd-fonts
-   bash ~/.nerd-fonts/install.sh
+	git clone https://github.com/ryanoasis/nerd-fonts.git ~/.nerd-fonts
+	bash ~/.nerd-fonts/install.sh
 fi
+
+# install Node
+node_version_file=$HOME/.node-version
+if [ ! -f $node_version_file ]; then
+	cp $home_skel/.node-version $node_version_file
+	fnm install
+fi
+
+# install lazyvim
+nvim_dir=$HOME/.config/nvim
+if [ ! -d $nvim_dir ]; then
+	git clone https://github.com/LazyVim/starter $nvim_dir
+	rm -rf $nvim_dir/.git
+fi
+cp lazyvim/init.lua $nvim_dir/init.lua
+cp lazyvim/config/lazy.lua $nvim_dir/lua/config/lazy.lua
+cp lazyvim/plugins/* $nvim_dir/lua/plugins/
