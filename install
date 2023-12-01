@@ -109,3 +109,11 @@ if [ ! -d $alacritty_home ]; then
 	mkdir $alacritty_home
 fi
 cp $home_skel/.config/alacritty/alacritty.yml $alacritty_home/alacritty.yml
+
+#######################
+# post-install docker #
+#######################
+sudo systemctl enable --now docker
+sudo systemctl enable --now containerd
+sudo usermod -aG docker $USER
+echo "Install Docker successfully, Please Log out and Log back!!"
