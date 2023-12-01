@@ -3,6 +3,8 @@
 # global variables
 home_skel=home/skel
 
+cp $home_skel/.bashrc $HOME/.bashrc
+
 # enable rpmfusion repo
 check_repo_exists=$(dnf repolist | grep rpmfusion | wc -l)
 expect=4
@@ -79,6 +81,31 @@ if [ ! -d $nvim_dir ]; then
 	git clone https://github.com/LazyVim/starter $nvim_dir
 	rm -rf $nvim_dir/.git
 fi
-cp lazyvim/init.lua $nvim_dir/init.lua
-cp lazyvim/config/lazy.lua $nvim_dir/lua/config/lazy.lua
-cp lazyvim/plugins/* $nvim_dir/lua/plugins/
+cp $home_skel/.config/nvim/init.lua $nvim_dir/init.lua
+cp $home_skel/.config/nvim/lua/config/lazy.lua $nvim_dir/lua/config/lazy.lua
+cp $home_skel/.config/nvim/lua/plugins/* $nvim_dir/lua/plugins/
+
+#####################
+# config fish-shell #
+#####################
+omf_home=$HOME/.local/share/omf
+if [ ! -d $omf_home ]; then
+	# install oh-my-fish
+	curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+	# install plugins
+	omf install bang-bang
+	omf install clearance
+fi
+# copy config
+cp $home_skel/.config/fish/functions/* $HOME/.config/fish/functions/
+cp $home_skel/.config/fish/config.fish $HOME/.config/fish/
+cp $home_skel/.config/fish/fish_variables $HOME/.config/fish/
+
+####################
+# config alacritty #
+####################
+alacritty_home=$HOME/.config/alacritty
+if [ ! -d $alacritty_home ]; then
+	mkdir $alacritty_home
+fi
+cp $home_skel/.config/alacritty/alacritty.yml $alacritty_home/alacritty.yml
