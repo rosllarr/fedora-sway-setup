@@ -6,9 +6,13 @@ return {
         "stylua",
         "shfmt",
         "lua-language-server",
-        "pyright",
-        "black",
         "prettier",
+        -- "pyright",
+        -- "black",
+        "python-lsp-server",
+        "yapf", -- code formatting (preferred over autopep8)
+        "pyflakes", -- linter to detect errors
+        "pydocstyle", -- linter for docstring style checking
       },
     },
   },
