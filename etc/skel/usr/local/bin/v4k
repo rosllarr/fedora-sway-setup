@@ -1,0 +1,8 @@
+#!/bin/bash
+
+wlr-randr \
+	--output HDMI-A-1 \
+	--transform 270 \
+	--mode 3840x2160@60Hz \
+	--scale 2.0 \
+	--pos 0,-1920

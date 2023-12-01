@@ -2,6 +2,7 @@
 
 # global variables
 home_skel=home/skel
+etc_skel=etc/skel
 
 cp $home_skel/.bashrc $HOME/.bashrc
 
@@ -27,7 +28,9 @@ if [ ! $check_repo_exists == $expect ]; then
 	sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
 fi
 
-# enable alacritty and lazygit repos
+######################################
+# enable alacritty and lazygit repos #
+######################################
 check_repo_exists=$(dnf repolist | grep atim | wc -l)
 expect=2
 if [ ! $check_repo_exists == $expect ]; then
@@ -38,6 +41,8 @@ fi
 sudo dnf groupinstall -y 'C Development Tools and Libraries'
 sudo dnf install -y $(cat packages-lists)
 pip3 install --user pynvim
+pip3 install --user pipdeptree
+pip3 install --user pip3-autoremove
 
 # install rust
 if ! command -v cargo &>/dev/null; then
@@ -117,3 +122,23 @@ sudo systemctl enable --now docker
 sudo systemctl enable --now containerd
 sudo usermod -aG docker $USER
 echo "Install Docker successfully, Please Log out and Log back!!"
+
+#########################
+# paste utility scripts #
+#########################
+sudo cp $etc_skel/usr/local/bin/* /usr/local/bin/
+
+#############
+# setup vpn #
+#############
+# setup Opsta vpn
+vpn_home=$HOME/vpn
+cp -r $home_skel/vpn $vpn_home
+# setup PTT vpn
+vpn_ptt_venv=$HOME/.vpn-ptt-venv
+if [ ! -d $vpn_ptt_venv ]; then
+	python3 -m venv $vpn_ptt_venv
+	source "$vpn_ptt_venv/bin/activate"
+	pip3 install -r $vpn_home/vpn-ptt-requirements.txt
+	deactivate
+fi
