@@ -35,6 +35,16 @@ if [ ! $check_repo_exists == $expect ]; then
 	sudo dnf config-manager --add-repo https://download.opensuse.org/repositories/shells:fish/Fedora_39/shells:fish.repo
 fi
 
+#############################
+# enable google-chrome repo #
+#############################
+check_repo_exists=$(dnf repolist | grep google-chrome | wc -l)
+expect=1
+if [ ! $check_repo_exists == $expect ]; then
+	sudo dnf install fedora-workstation-repositories -y
+	sudo dnf config-manager --set-enabled google-chrome
+fi
+
 ######################################
 # enable alacritty and lazygit repos #
 ######################################
