@@ -40,9 +40,7 @@ fi
 
 sudo dnf groupinstall -y 'C Development Tools and Libraries'
 sudo dnf install -y $(cat packages-lists)
-pip3 install --user pynvim
-pip3 install --user pipdeptree
-pip3 install --user pip3-autoremove
+pip3 install --user -r python-packages
 
 # install rust
 if ! command -v cargo &>/dev/null; then
@@ -142,3 +140,25 @@ if [ ! -d $vpn_ptt_venv ]; then
 	pip3 install -r $vpn_home/vpn-ptt-requirements.txt
 	deactivate
 fi
+
+######################
+# install kube stack #
+######################
+# kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+# kubectx
+sudo git clone https://github.com/ahmetb/kubectx $HOME/.kubectx
+sudo ln -s $HOME/.kubectx/kubectx /usr/local/bin/kubectx
+sudo ln -s $HOME/.kubectx/kubens /usr/local/bin/kubens
+# helm
+curl -LO https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz
+tar xf helm-*
+chmod +x linux-amd64/helm
+sudo mv linux-amd64/helm /usr/local/bin/
+rm -rf linux-amd64 helm-*
+# minikube
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+rm -rvf minikube-linux-amd64
