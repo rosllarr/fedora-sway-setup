@@ -102,7 +102,8 @@ fi
 node_version_file=$HOME/.node-version
 if [ ! -f $node_version_file ]; then
 	cp $home_skel/.node-version $node_version_file
-	fnm install
+	# bug on this step, run commands manually after this script is finished.
+	# fnm install
 fi
 
 ###################
@@ -206,5 +207,21 @@ fi
 ################
 # disable beep #
 ################
-sudo cp $etc_skel/etc/systemd/system/disable-pcspkr.service /etc/systemd/system/disable-pcspkr.service
-sudo systemctl enable --now disable-pcspkr.service
+if [ ! -f /etc/systemd/system/disable-pcspkr.service ]; then
+	sudo cp $etc_skel/etc/systemd/system/disable-pcspkr.service /etc/systemd/system/disable-pcspkr.service
+	sudo systemctl enable --now disable-pcspkr.service
+fi
+
+###################
+# install postman #
+###################
+postman_home=$HOME/.Postman
+if [ ! -d $postman_home ]; then
+	wget https://dl.pstmn.io/download/latest/linux_64
+	tar xf linux_64
+	rm -rf linux_64
+	mv Postman $postman_home
+	sudo ln -sf $postman_home/Postman /usr/local/bin/postman
+fi
+
+echo "Manual run -- fnm install"
