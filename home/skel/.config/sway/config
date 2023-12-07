@@ -233,8 +233,8 @@ output * bg /usr/share/backgrounds/default.png fill
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+v splith
+    bindsym $mod+b splitv
 
     # Switch the current container between different layout styles
     bindsym $mod+c layout stacking
@@ -275,10 +275,10 @@ mode "resize" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $mod+Shift+b resize shrink width 20px
-    bindsym $mod+b resize grow width 20px
-    bindsym $mod+Shift+v resize shrink height 20px
-    bindsym $mod+v resize grow height 20px
+    bindsym $mod+Shift+v resize shrink width 20px
+    bindsym $mod+v resize grow width 20px
+    bindsym $mod+Shift+b resize shrink height 20px
+    bindsym $mod+b resize grow height 20px
 
     # Ditto, with arrow keys
     bindsym Left resize shrink width 10px
