@@ -8,8 +8,8 @@
 #
 # All imports must either be absolute paths starting with `/`, or paths relative
 # to the user's home directory starting with `~/`.
-#import:
-#  - /path/to/alacritty.yml
+import:
+  - ~/.config/alacritty/themes/themes/challenger_deep.yaml
 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
@@ -451,7 +451,7 @@
 #   - (Linux/BSD/macOS) `$SHELL` or the user's login shell, if `$SHELL` is unset
 #   - (Windows) powershell
 shell:
-   program: /usr/bin/fish
+  program: /usr/bin/fish
 #  args:
 #    - --login
 

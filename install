@@ -139,7 +139,8 @@ cp $home_skel/.config/fish/fish_variables $HOME/.config/fish/
 ####################
 alacritty_home=$HOME/.config/alacritty
 if [ ! -d $alacritty_home ]; then
-	mkdir $alacritty_home
+	mkdir -p $alacritty_home/themes
+	git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
 fi
 cp $home_skel/.config/alacritty/alacritty.yml $alacritty_home/alacritty.yml
 
