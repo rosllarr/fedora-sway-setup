@@ -225,4 +225,13 @@ if [ ! -d $postman_home ]; then
 	sudo ln -sf $postman_home/Postman /usr/local/bin/postman
 fi
 
+##################
+# config zathura #
+##################
+zathura_home=$HOME/.config/zathura
+if [ ! -d $zathura_home ]; then
+	mkdir $zathura_home
+	cp $home_skel/.config/zathura/zathurarc $zathura_home/zathurarc
+fi
+
 echo "Manual run -- fnm install"

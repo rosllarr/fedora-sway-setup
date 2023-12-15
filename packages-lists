@@ -26,4 +26,5 @@ docker-compose-plugin
 fish
 telegram-desktop
 mupdf
+zathura-pdf-mupdf
 google-chrome-stable
