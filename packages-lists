@@ -18,13 +18,9 @@ openfortivpn
 libpq-devel
 python3-devel
 openssl
-docker-ce
-docker-ce-cli
-containerd.io
-docker-buildx-plugin
-docker-compose-plugin
-fish
+
+
 telegram-desktop
 mupdf
 zathura-pdf-mupdf
-google-chrome-stable
+
